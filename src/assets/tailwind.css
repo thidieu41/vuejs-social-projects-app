@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input,
+textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  background-color: #1a1a1a;
+  color: white;
+}
+input {
+  height: 45px;
+}
+
+input:focus,
+textarea:focus {
+  border: none;
+  outline: none;
+}
+
+body {
+  background-color: #1a1a1a;
+  color: white;
+  text-align: left;
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+button {
+  color: white;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* respon app */
+.app-content {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 20px;
+  height: 95vh;
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    grid-template-columns: 60% 40%;
+  }
+}
+
+@media (max-width: 425px) {
+  .app-content {
+    grid-template-columns: auto;
+  }
+}
