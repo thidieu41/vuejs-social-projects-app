@@ -18,7 +18,7 @@
       <textarea placeholder="What on your mind..." rows="2" class="w-full" />
       <div class="flex justify-end">
         <button
-          class="w-[40%] border rounded p-2 hover:border-[#FFFD02] hover:text-[#FFFD02]"
+          class="w-[40%] border rounded-md p-2 border-[#FFFD02] text-[#FFFD02]"
         >
           Share Now
         </button>

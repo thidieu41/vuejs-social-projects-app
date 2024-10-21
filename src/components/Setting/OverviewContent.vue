@@ -3,11 +3,11 @@
     <div class="grid md:grid-cols-2 md:gap-5 grid-cols-1 mt-2">
       <div>
         <!-- avatar -->
-        <div class="flex flex-col items-center p-6">
+        <div class="flex flex-col items-center p-5">
           <!-- Avatar preview -->
           <div class="relative">
             <img
-              :src="avatarSrc"
+              :src="state.avatarSrc"
               alt="User Avatar"
               class="w-32 h-32 rounded-full object-cover border-4 border-[#FFFD02]"
             />
@@ -133,24 +133,23 @@ const state = reactive({
     job: "",
     country: "",
   },
-  avatarSrc: "https://via.placeholder.com/150", // Default avatar image
+  avatarSrc: "https://via.placeholder.com/150",
 });
 
 const onFileChange = (event) => {
-  const file = event.target.files[0]; // Get the selected file
+  const file = event.target.files[0];
   if (file && file.type.startsWith("image/")) {
-    const reader = new FileReader(); // Create a FileReader to read the file
+    const reader = new FileReader();
     reader.onload = (e) => {
-      state.avatarSrc = e.target.result; // Set the image URL to update the avatar
+      console.log(e.target.result);
+      state.avatarSrc = e.target.result;
     };
-    reader.readAsDataURL(file); // Convert the file to a data URL
+    reader.readAsDataURL(file);
   }
 };
 
 const submitForm = () => {
-  // Handle form submission logic here (e.g., API call)
   console.log("Form data:", state.formData);
-  // Reset form after submission
   state.formData = { name: "", email: "", message: "" };
 };
 </script>

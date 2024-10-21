@@ -2,9 +2,7 @@
   <div class="bg-[#282828] rounded-lg p-4 border border-gray-700">
     <div class="flex items-center justify-between">
       <p class="font-bold">Project List</p>
-      <button>
-        <img src="/images/add_plus.svg" class="h-[25px] w-[25px]" />
-      </button>
+      <CreateProjectModal />
     </div>
     <div class="project-list-content mt-3">
       <div v-for="(item, index) in projectList" :key="index">
@@ -42,10 +40,10 @@
 
           <!-- content -->
           <div
-            v-if="item.id === isProjectOpen"
+            v-if="item.id === state.isProjectOpen"
             class="overflow-hidden transition-all duration-700 ease-in-out transform"
             :class="
-              item.id === isProjectOpen
+              item.id === state.isProjectOpen
                 ? 'opacity-100 translate-y-0'
                 : ' opacity-0 -translate-y-4'
             "
@@ -84,6 +82,7 @@
 
 <script setup>
 import { reactive } from "vue";
+import CreateProjectModal from "./CreateProject.vue";
 
 const projectList = [
   {

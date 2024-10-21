@@ -18,23 +18,55 @@
         id="search"
         class="block w-full p-4 ps-10 text-sm rounded-lg text-white"
         placeholder="Search"
+        v-model="state.inputSearch"
+        @keypress.enter="debounceInputSearch"
+        @keyup="debounceInputSearch"
       />
-      <button type="button" class="absolute end-3 bottom-3">
-        <img src="/images/msg/filter.svg" alt="note" class="h-[20px]" />
-      </button>
+      <div ref="dropdown">
+        <button
+          type="button"
+          class="absolute end-3 bottom-3"
+          @click="onOpenMenuFilter"
+        >
+          <img src="/images/msg/filter.svg" alt="note" class="h-[20px]" />
+        </button>
+        <transition name="fade">
+          <div
+            v-if="state.isDropdownOpen"
+            class="absolute right-0 z-10 w-40 rounded-md shadow-lg bg-[#282828] ring-1 ring-gray-500"
+          >
+            <div
+              class="py-1"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              <a
+                href="#"
+                @click.prevent="onOpenMenuFilter()"
+                class="block px-4 py-2 text-sm text-white text-left hover:bg-gray-700 hover:text-[#fffd02]"
+                role="menuitem"
+                v-for="(item, key) in listMenu"
+                :key="key"
+                >{{ item.name }}</a
+              >
+            </div>
+          </div>
+        </transition>
+      </div>
     </div>
 
     <div class="flex flex-col gap-5 chat-list-app">
-      <div v-for="(item, index) in chatList" :key="index">
+      <div v-for="(item, index) in chatList" :key="index" class="w-full">
         <div
           role="button"
           :class="[
             'flex gap-2 items-center p-2 rounded-lg chat-list-item hover:bg-[#4C4C4C] w-full justify-between overflow-x-hidden',
-            state.chatId === item.id ? 'bg-[#4C4C4C]' : '',
+            chatId === item.id ? 'bg-[#4C4C4C]' : '',
           ]"
-          @click="onSetChatId(item.id)"
+          @click="handleSetChatId(item.id)"
         >
-          <div class="flex gap-2 items-center max-w-[80%]">
+          <div class="flex gap-2 items-center">
             <img
               :src="item.url"
               alt="note"
@@ -43,7 +75,7 @@
             <div class="text-left">
               <p class="font-bold">{{ item.name }}</p>
               <p
-                class="text-sm whitespace-nowrap text-ellipsis overflow-x-hidden w-[80%]"
+                class="text-sm whitespace-nowrap text-ellipsis overflow-x-hidden max-w-[270px]"
               >
                 {{ item.lastMsg }}
               </p>
@@ -58,68 +90,89 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import {
+  reactive,
+  onMounted,
+  onUnmounted,
+  ref,
+  defineProps,
+  defineEmits,
+} from "vue";
+import { debounce } from "lodash";
 
-const chatList = [
+const listMenu = [
   {
-    id: 1,
-    url: "/images/avatar/A1.jpg",
-    name: "James",
-    lastMsg: "Lorem Ipsum is simply dummy text ",
-    date: " 2 hours",
-    unread: false,
-    isReading: false,
+    name: "All",
+    id: "all",
   },
   {
-    id: 2,
-    url: "/images/avatar/A2.avif",
-    name: "Richard",
-    lastMsg: "Lorem Ipsum is simply dummy text ",
-    date: " 2 hours",
-    unread: false,
-    isReading: false,
+    name: "User",
+    id: "user",
   },
   {
-    id: 3,
-    url: "/images/avatar/A3.avif",
-    name: "Charles",
-    lastMsg: "Lorem Ipsum is simply dummy text ",
-    date: " 2 hours",
-    unread: true,
-    isReading: false,
+    name: "Group",
+    id: "group",
   },
   {
-    id: 4,
-    url: "/images/avatar/A4.avif",
-    name: "Elizabeth",
-    lastMsg: "Lorem Ipsum is simply dummy text ",
-    date: " 2 hours",
-    unread: false,
-    isReading: false,
+    name: "Unread",
+    id: "unread",
   },
   {
-    id: 5,
-    url: "/images/avatar/A5.jpeg",
-    name: "Karen",
-    lastMsg: "Lorem Ipsum is simply dummy text ",
-    date: " 2 hours",
-    unread: false,
-    isReading: true,
+    name: "Read",
+    id: "read",
   },
 ];
 
 const state = reactive({
-  chatId: 5,
+  isDropdownOpen: false,
+  inputSearch: "",
 });
 
-const onSetChatId = (newChat) => {
-  state.chatId = newChat;
+const props = defineProps({
+  chatId: Number,
+  handleSetChatId: Function,
+  chatList: Array,
+});
+
+const emit = defineEmits(["on-search"]);
+
+const dropdown = ref(null);
+
+const debounceInputSearch = debounce(() => {
+  emit("on-search", state.inputSearch);
+}, 500);
+
+const onOpenMenuFilter = () => {
+  state.isDropdownOpen = !state.isDropdownOpen;
 };
+
+const handleClickOutside = (event) => {
+  if (dropdown.value && !dropdown.value.contains(event.target)) {
+    state.isDropdownOpen = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>
 .chat-list-app {
   max-height: 85%;
   overflow: scroll;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

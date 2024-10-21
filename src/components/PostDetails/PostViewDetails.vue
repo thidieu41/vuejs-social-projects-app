@@ -68,7 +68,11 @@
           placeholder="Write your comment"
         />
         <div class="mt-2 flex justify-end">
-          <button class="p-2 rounded min-w-[200px] border">Comment</button>
+          <button
+            class="p-2 rounded-md min-w-[200px] border border-[#FFFD02] text-[#FFFD02]"
+          >
+            Comment
+          </button>
         </div>
       </div>
 

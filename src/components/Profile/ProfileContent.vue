@@ -27,7 +27,7 @@
               </p>
             </div>
             <button
-              class="border py-2 lg:px-4 px-2 md:px-5 rounded-lg lg:mr-3 flex gap-2 items-center mt-2 whitespace-nowrap justify-center md:w-[30%] w-full"
+              class="border text-[#FFFD02] border-[#FFFD02] py-2 lg:px-4 px-2 md:px-5 rounded-lg lg:mr-3 flex gap-2 items-center mt-2 whitespace-nowrap justify-center md:w-[30%] w-full"
             >
               <img src="/images/edit.svg" class="h-[20px] w-[20px]" />
               Edit Profile
